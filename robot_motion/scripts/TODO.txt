@@ -1,0 +1,14 @@
+On the simulation:
+
+1. force control with kinematics done
+2.0 add the other freedom to the table done 
+2.1 orientation control with kinematics done
+3. optimization of the redundancy not doing
+	
+
+After:
+1. force control with dynamics:
+	use the dynamic model developed
+2. orientation control with redundancy
+
+

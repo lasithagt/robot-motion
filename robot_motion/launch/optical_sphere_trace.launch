@@ -1,0 +1,19 @@
+ <?xml version="1.0" encoding="utf-8"?>
+<launch>
+	<arg name="robot_name"/>
+	<param name="dir_" type="str" value="test.bag"/> 
+
+<!-- 	<node pkg="kuka_torque" type="kukaCmd" name="sendCmdData" output="screen"> </node>
+	<node pkg="kuka_torque" type="saveData" name="SaveData" output="screen"> </node> -->
+
+	<node name="netft_node" pkg="netft_utils" type="netft_node" respawn="false" output="screen" args="192.168.0.127"/>
+
+	<arg name="node_start_delay" default="1.0" />  
+	<node name="listener" pkg="roscpp_tutorials" type="listener" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' " />
+
+	<node pkg="rosbag" type="record" name="rosbag_record_cam"
+       args="record -o /tmp/hrp2-cameras /wide/left/image_raw /wide/left/camera_info    /wide/right/image_raw /wide/right/camera_info /narrow/left/image_raw /narrow/left/camera_info    /narrow/right/image_raw /narrow/right/camera_info"
+       if="$(arg record_cameras)" />
+
+	<!-- run the robot interface driver so that we can see robot transforms -->
+</launch>

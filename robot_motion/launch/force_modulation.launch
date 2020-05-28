@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+	<!-- This launch file  -->
+	<arg name="robot_name"/>
+
+	<!-- <param name="dir_" type="str" value="test.bag"/>  -->
+
+	<!-- load launch file to connect to the MSP432 micro-controller -->
+	<!-- <include file="$(find serial_ros)/launch/serialTest.launch"/> -->
+
+	<!-- load the force sensor node -->
+	<node name="netft_node" pkg="netft_utils" type="netft_node" respawn="false" output="screen" args="--address 192.168.0.127 --rate 500"/>
+
+	<!-- load the msp serial command server -->
+	<node name="mspSerial_command" pkg="serial_ros" type="mspSerial_command.py" respawn="false" output="screen" />
+
+	<!-- load lowpass and bandpass filter node -->
+	<node name="FTfilter" pkg="netft_utils" type="FTfilter.py" respawn="false" output="screen" />
+
+	<!-- load stiffness identification node -->
+	<node name="stiffness_identification" pkg="kuka_motion_lib" type="stiffness_identification.py" respawn="false" output="screen" />
+
+
+</launch>
