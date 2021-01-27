@@ -77,6 +77,7 @@ namespace robot_interface {
   class robotStateHandler : public robotHandler<ROSMSG> {
   public:
     void init(const std::string& topic, ros::NodeHandle &nh) {
+      
       // ros::NodeHandle nh;
       ROS_INFO_STREAM(topic);
       subscriber = nh.subscribe<ROSMSG>(topic, 1, &robotStateHandler<ROSMSG>::set, this);

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(robot_interface)
+project(force-control)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -126,10 +126,10 @@ include_directories(
 #   src/${PROJECT_NAME}/robot_interface.cpp
 # )
 
-add_library(robot_interface
-  src/robot_class.cpp src/robot_interface_sim.cpp)
+add_library(force_control
+  src/AdmittanceForceController.cpp)
 
-target_link_libraries(robot_interface
+target_link_libraries(force_control
     ${catkin_LIBRARIES}
 )
 
@@ -179,7 +179,7 @@ target_link_libraries(robot_interface
 # )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS robot_interface
+install(TARGETS force_control
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

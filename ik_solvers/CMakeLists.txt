@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(robot_interface)
+project(ik_solvers)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  modern_robotics
 )
 
 ## System dependencies are found with CMake's conventions
@@ -105,8 +106,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES robot_interface
-  CATKIN_DEPENDS iiwa_msgs roscpp rospy std_msgs
+  LIBRARIES ik_solvers
+  CATKIN_DEPENDS iiwa_msgs roscpp rospy std_msgs modern_robotics
 #  DEPENDS system_lib
 )
 
@@ -117,8 +118,9 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include/${PROJECT_NAME}
+  include
   ${catkin_INCLUDE_DIRS}
+  ../eigen/
 )
 
 ## Declare a C++ library
@@ -126,10 +128,10 @@ include_directories(
 #   src/${PROJECT_NAME}/robot_interface.cpp
 # )
 
-add_library(robot_interface
-  src/robot_class.cpp src/robot_interface_sim.cpp)
+add_library(ik_solvers
+  src/ik_solver.cpp)
 
-target_link_libraries(robot_interface
+target_link_libraries(ik_solvers
     ${catkin_LIBRARIES}
 )
 
@@ -179,7 +181,7 @@ target_link_libraries(robot_interface
 # )
 
 ## Mark executables and/or libraries for installation
-install(TARGETS robot_interface
+install(TARGETS ik_solvers
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
