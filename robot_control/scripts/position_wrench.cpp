@@ -23,6 +23,7 @@
 #include "kuka_model.h"
 #include "models.h"
 #include "robot_interface_sim_wrench.hpp"
+#include "robot_interface_real_wrench.hpp"
 
 #include <boost/program_options.hpp>
 
@@ -45,7 +46,7 @@ bool sim = false;
 Eigen::Vector3d f_data;
 Eigen::Vector3d kd_data;
 Eigen::Vector3d f_data_prev;
-robot_interface::robotABSTRACT* robot_;
+robot_interface::robotKUKAForceControl* robot_;
 
 
 
@@ -95,26 +96,34 @@ int main (int argc, char** argv) {
 	
 
 	/* -------------------- orocos kdl robot initialization-------------------------*/
-	KUKAModelKDLInternalData robotParams;
+	ros_kuka::KUKAModelKDLInternalData robotParams;
 	robotParams.numJoints = 7;
 	robotParams.Kv = Eigen::MatrixXd(7,7);
 	robotParams.Kp = Eigen::MatrixXd(7,7);
 
 	// ---------------------------------- Define the robot and contact model ---------------------------------- 
-	KDL::KukaDHKdl robot = KDL::KukaDHKdl();
+	ros_kuka::KukaDHKdl robot = ros_kuka::KukaDHKdl();
 	KDL::Chain chain = robot();
 
-	std::shared_ptr<RobotAbstract> kuka_robot = std::shared_ptr<RobotAbstract>(new KUKAModelKDL(chain, robotParams));
+	std::shared_ptr<RobotAbstract> kuka_robot = std::shared_ptr<RobotAbstract>(new ros_kuka::KUKAModelKDL(chain, robotParams));
 	kuka_robot->initRobot();
 
 
+	robot_interface::FT_Transform forceTransform;
+
 	// Subscribers
-	if (!sim) {
-		robot_ = new robot_interface::robotKUKA();
-	} else {
-		robot_ = new robot_interface::robotKUKA_SIM_WRENCH(kuka_robot, false);
+	if (!sim) 
+	{
+		robot_ = new robot_interface::robotKUKA_WRENCH(kuka_robot, forceTransform, false);
+		robot_->init(nh_states, nh_command);
+		ROS_INFO_STREAM("Initialized Real Robot...");
+	} else 
+	{
+		robot_ = new robot_interface::robotKUKA_SIM_WRENCH(kuka_robot, forceTransform, false);
+		robot_->init(nh_states, nh_command);
 		ROS_INFO_STREAM("Initialized Gazebo Simulation...");
 	}
+
 	
 	std::string vel_prof_name = "cubic_polynomial";
 
@@ -140,7 +149,6 @@ int main (int argc, char** argv) {
 	position_ref.position.quantity.resize(7);
 
 	iiwa_msgs::Wrench wrench_ref;
-	wrench_ref.wrench.quantity.resize(6);
 
 
 	double duration = 50.0;
@@ -230,9 +238,9 @@ int main (int argc, char** argv) {
 		// Set the next position
 		robot_->setJointPosition(position_ref);
 		
-		wrench_ref.wrench.quantity[0] = q_curr(7);
-		wrench_ref.wrench.quantity[1] = q_curr(8);
-		wrench_ref.wrench.quantity[2] = q_curr(9);
+		wrench_ref.x = q_curr(7);
+		wrench_ref.y = q_curr(8);
+		wrench_ref.z = q_curr(9);
 
 		wrench_ref.header.stamp = ros::Time::now();
 

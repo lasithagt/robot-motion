@@ -42,7 +42,7 @@
 
 
 
-// Abstract class for robot KUKA arm
+// Abstract class for robot KUKA arm interface with FRI
 namespace robot_interface {
  
   class robotABSTRACT {
@@ -54,6 +54,8 @@ namespace robot_interface {
     virtual void setJointVelocity(const iiwa_msgs::JointVelocity& velocity) {};
     virtual void setJointTorque(const iiwa_msgs::JointTorque& torque) {};
     virtual void setWrench(const iiwa_msgs::Wrench& wrench) {};
+    virtual void setJointPositionWrench(const iiwa_msgs::JointPosition& position, const iiwa_msgs::Wrench& wrench) {};
+    virtual void setJointPositionTorque(const iiwa_msgs::JointPosition& position, const iiwa_msgs::JointTorque& torque_ff) {};
 
     virtual bool getCartesianPose(geometry_msgs::PoseStamped& value) {return 0;}
     virtual bool getJointPosition(iiwa_msgs::JointPosition& value) {return 0;}
@@ -73,7 +75,7 @@ namespace robot_interface {
   };
 
 
-  class robotKUKA : public robotABSTRACT {
+  class robotKUKA : virtual public robotABSTRACT {
   public:
     
     robotKUKA();
@@ -118,6 +120,7 @@ namespace robot_interface {
 
 
   protected:
+
     // Subscribed topics / states
     std_msgs::Time time_;
     robotStateHandler<geometry_msgs::PoseStamped> handler_state_pose_;
@@ -130,7 +133,7 @@ namespace robot_interface {
     robotStateHandler<iiwa_msgs::JointVelocity> handler_state_comm_joint_velocity_;
     
     // Commands
-    robotCommandHandler<iiwa_msgs::JointPosition> handler_command_torque_;
+    robotCommandHandler<iiwa_msgs::JointTorque> handler_command_joint_torque_;
     robotCommandHandler<iiwa_msgs::Wrench> handler_command_wrench_;
     robotCommandHandler<iiwa_msgs::JointPosition> handler_command_joint_position_;
     robotCommandHandler<iiwa_msgs::JointVelocity> handler_command_joint_velocity_;

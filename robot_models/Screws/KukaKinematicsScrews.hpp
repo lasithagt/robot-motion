@@ -1,12 +1,12 @@
-#ifndef ROS_KUKA_ROBOT_HPP
-#define ROS_KUKA_ROBOT_HPP
+#ifndef KUKA_ROBOT_HPP
+#define KUKA_ROBOT_HPP
 
 #include <iostream>
 #include <Eigen/Dense>
 #include "modern_robotics.h"
 // # define M_PI           3.14159265358979323846  /* pi */
 
-namespace kuka_models {
+namespace models {
 
 class KUKA {
 
@@ -17,25 +17,27 @@ public:
 		M.resize(4,4);
 
 		Eigen::Vector3d w1(0,0,1);
-		Eigen::Vector3d w2(0,-1,0);
+		Eigen::Vector3d w2(0,1,0);
 		Eigen::Vector3d w3(0,0,1);
-		Eigen::Vector3d w4(0,1,0);
+		Eigen::Vector3d w4(0,-1,0);
 		Eigen::Vector3d w5(0,0,1);
-		Eigen::Vector3d w6(0,-1,0);
+		Eigen::Vector3d w6(0,1,0);
 		Eigen::Vector3d w7(0,0,1);
 
-		Eigen::Vector3d q1(0,0,0.2025+0.1575);
-		Eigen::Vector3d q2(0,0,0.2025+0.1575);
+		Eigen::Vector3d q1(0,0,(0.2025+0.1575));
+		Eigen::Vector3d q2(0,0, (0.2025+0.1575));
 		Eigen::Vector3d q3(0,0,0.2025+0.1575);
 		Eigen::Vector3d q4(0,0,0.2025+0.42+0.1575);
 		Eigen::Vector3d q5(0,0,0.2025+0.42+0.1575);
 		Eigen::Vector3d q6(0,0,0.2025+0.42+0.4+0.1575);
-		Eigen::Vector3d q7(0,0,0.2025+0.42+0.4+0.126+0.1575);
+		// Eigen::Vector3d q7(0,0,0.2025+0.42+0.4+0.126+0.1575);
+		Eigen::Vector3d q7(0,0,0.2025+0.42+0.4+0.241+0.1575);
+
 
 
 	    M << 1, 0, 0, 0,
 	    		0, 1, 0, 0,
-	    		0, 0, 1, 0.2025+0.42+0.4+0.126+0.1575,
+	    		0, 0, 1, 0.2025+0.42+0.4+0.241+0.1575,
 	    		0, 0, 0, 1;
 
 	    double h = 0;

@@ -39,14 +39,16 @@ namespace robot_interface {
   public:
     robotHandler() : is_new(false) {}
     
-    void set_value(const ROSMSG& value) {
+    void set_value(const ROSMSG& value) 
+    {
       mutex.lock();
       data = value;
       is_new = true;
       mutex.unlock();
     }
     
-    bool get_value(ROSMSG& value) {
+    bool get_value(ROSMSG& value) 
+    {
       bool was_new = false;
       mutex.lock();
       value = data;
@@ -57,11 +59,13 @@ namespace robot_interface {
       return was_new;
     }
     
-    bool has_new_value() {
+    bool has_new_value() 
+    {
       return is_new;
     }
     
-    ROSMSG get_value_unsynchronized() {
+    ROSMSG get_value_unsynchronized() 
+    {
       return data;
     }
 
@@ -123,10 +127,14 @@ namespace robot_interface {
     
     void publishIfNew() {
       static ROSMSG msg;
-      if (publisher.getNumSubscribers() && robotHandler<ROSMSG>::get_value(msg))
-        // std::cout << "Publishing..." <<std::endl;
+      // && robotHandler<ROSMSG>::get_value(msg)
+      robotHandler<ROSMSG>::get_value(msg);
+      if (publisher.getNumSubscribers())
+      {
         publisher.publish(msg);
+      }
     }
+
   private:
     ros::Publisher publisher;
  

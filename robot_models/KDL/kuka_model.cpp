@@ -1,10 +1,15 @@
-
 #include "kuka_model.h"
 
+using namespace KDL;
 
-KUKAModelKDL::KUKAModelKDL(const KDL::Chain& robotChain, const KUKAModelKDLInternalData& robotParams) : robotChain_(robotChain), robotParams_(robotParams) 
+namespace ros_kuka {
+
+
+KUKAModelKDL::KUKAModelKDL(const Chain& robotChain, const KUKAModelKDLInternalData& robotParams) : robotChain_(robotChain), robotParams_(robotParams) 
 {
-    dynamicsChain_ = new KDL::ChainDynParam(robotChain_, KDL::Vector(0,0,-9.8));
+    robotParams_.init();
+    dynamicsChain_ = new ChainDynParam(robotChain_, Vector(0,0,-9.8));
+
 } 
 
 KUKAModelKDL::~KUKAModelKDL()
@@ -35,46 +40,47 @@ void KUKAModelKDL::getForwardKinematics(double* q, double* qd, double *qdd, Eige
     memcpy(qd_.data.data(), qd, 7 * sizeof(double));
     memcpy(qdd_.data.data(), qdd, 7 * sizeof(double));
 
-    // TODO: make it updatable
-    Eigen::MatrixXd T(3,3);
-    T << -1, 0, 0, 0, -1, 0, 0, 0, 1;
+    auto R = robotParams_.baseTransform.block(0,0,3,3);
 
     if (computeOther)
     {
         // compute pose, vel
-        KDL::ChainFkSolverVel_recursive fksolver_vel(robotChain_);
-        KDL::JntArrayVel jntVel(q_, qd_);
+        ChainFkSolverVel_recursive fksolver_vel(robotChain_);
+        JntArrayVel jntVel(q_, qd_);
         fksolver_vel.JntToCart(jntVel, frame_vel_, -1);
         memcpy(poseM.data(), frame_vel_.M.R.data, 9 * sizeof(double));
         memcpy(poseP.data(), frame_vel_.p.p.data, 3 * sizeof(double));
         memcpy(vel.data(), frame_vel_.p.v.data, 3 * sizeof(double));
         poseM.transposeInPlace();
 
-        poseM = poseM.eval() * T; 
-        // poseP = T * poseP.eval();
+        vel   = R * vel.eval();
+
+        poseM = R * poseM.eval(); 
+        poseP = R * poseP.eval();  
 
         // compute accel
-        KDL::ChainJntToJacSolver jacSolver(robotChain_);
+        ChainJntToJacSolver jacSolver(robotChain_);
         jacSolver.JntToJac(q_, jacobian_);
         // accel = std::move(jacobian_.data * qdd_.data);
         
-        KDL::ChainJntToJacDotSolver jacDotSolver(robotChain_);
+        ChainJntToJacDotSolver jacDotSolver(robotChain_);
         jacDotSolver.JntToJacDot(jntVel, jacobian_, -1);
         // accel += jacobian_.data * qd_.data;
-
-
-    } else 
+    } 
+    else 
     {
         // compute pose
-        KDL::ChainFkSolverPos_recursive fksolver_pos(robotChain_);
+        ChainFkSolverPos_recursive fksolver_pos(robotChain_);
         fksolver_pos.JntToCart(q_, frame_, -1); 
         memcpy(poseM.data(), frame_.M.data, 9 * sizeof(double));
         memcpy(poseP.data(), frame_.p.data, 3 * sizeof(double));
         poseM.transposeInPlace();
 
-        poseM = poseM.eval() * T; 
-        // poseP = T * poseP.eval();
+        poseM = R * poseM.eval(); 
+        poseP = R * poseP.eval();  
     }
+
+
 }
 
 /* given q, qdot, qddot, outputs torque output*/
@@ -124,18 +130,21 @@ void KUKAModelKDL::getGravityVector(double* q, Eigen::VectorXd& gravityTorque)
 void KUKAModelKDL::getSpatialJacobian(double* q, Eigen::MatrixXd& jacobian)
 {   
     memcpy(q_.data.data(), q, 7 * sizeof(double));
-    KDL::ChainJntToJacSolver jacSolver(robotChain_);
+    ChainJntToJacSolver jacSolver(robotChain_);
     jacSolver.JntToJac(q_, jacobian_);
-    jacobian = std::move(jacobian_.data);
+
+
+    jacobian  = std::move(jacobian_.data);
+    jacobian  = robotParams_.jacTransform * jacobian.eval();
 }
 
 void KUKAModelKDL::getSpatialJacobianDot(double* q, double* qd, Eigen::MatrixXd& jacobianDot)
 {   
     memcpy(q_.data.data(), q, 7 * sizeof(double));
     memcpy(qd_.data.data(), qd, 7 * sizeof(double));
-    KDL::ChainJntToJacDotSolver jacDotSolver(robotChain_);
+    ChainJntToJacDotSolver jacDotSolver(robotChain_);
 
-    KDL::JntArrayVel jntVel(q_, qd_);
+    JntArrayVel jntVel(q_, qd_);
 
     jacDotSolver.JntToJacDot(jntVel, jacobian_, -1);
     jacobianDot = std::move(jacobian_.data);
@@ -145,6 +154,11 @@ void KUKAModelKDL::ik()
 {
     
 }
+
+}
+
+
+
 
 
 

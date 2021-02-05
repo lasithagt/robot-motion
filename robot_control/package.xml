@@ -78,9 +78,6 @@
   <exec_depend>robot_interface</exec_depend>
   <build_export_depend>robot_interface</build_export_depend>
 
-  <build_depend>robot_motion</build_depend>
-  <exec_depend>robot_motion</exec_depend>
-  <build_export_depend>robot_motion</build_export_depend>
 
   <build_depend>robot_models</build_depend>
   <exec_depend>robot_models</exec_depend>

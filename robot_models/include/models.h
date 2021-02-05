@@ -19,21 +19,24 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-#ifndef MODELS_HPP
-#define MODELS_HPP
+#ifndef ROS_MODELS_HPP
+#define ROS_MODELS_HPP
 
 #include <kdl/chain.hpp>
 #include <kdl/frames.hpp>
 #include <kdl/framevel.hpp>
+using namespace KDL;
 
-namespace KDL
+namespace ros_kuka {
+
+
+struct KukaDHKdl 
 {
-
-struct KukaDHKdl {
-	KukaDHKdl() = default;
+	KukaDHKdl()  = default;
 	~KukaDHKdl() = default;
 
-	Chain operator()() {
+	Chain operator()() 
+	{
 		Chain KukaDHKdl_;
 		
 		//joint 0
@@ -83,8 +86,8 @@ struct KukaDHKdl {
 													   RotationalInertia(0.010431,0.01,0.036376,0.0,0.0,0.0000101))));
 		//joint 7
 		KukaDHKdl_.addSegment(Segment(Joint(Joint::RotZ,1,0,0,0,100000),
-					   Frame::DH_Craig1989(0.0, 0, 0.241, 0.0),
-					   Frame::DH_Craig1989(0.0, 0, 0.241, 0.0).Inverse()*RigidBodyInertia(0.85,
+					   Frame::DH_Craig1989(0.0, 0, 0.126+0.136, 3.1416),
+					   Frame::DH_Craig1989(0.0, 0, 0.126+0.136, 3.1416).Inverse()*RigidBodyInertia(0.85,
 													   Vector::Zero(),
 													   RotationalInertia(0.03,0.03,0.03203,0.0,0.0,0.0))));
 	    return KukaDHKdl_;
@@ -92,4 +95,6 @@ struct KukaDHKdl {
 };
 
 }
+
+
 #endif

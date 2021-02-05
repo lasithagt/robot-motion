@@ -31,10 +31,8 @@ namespace robot_motion_primitives {
         // define the robot interface (sim or real)
         robot_interface_ = &robot_;
         robot_interface_->getRobotTime(curr_time);
-        ROS_INFO_STREAM(curr_time);
-
+        
         // define robot kinematics and dynamic parameters
-        // robot_def_ = &robot_d;
 
         // reserve the number of splines in vector
         splines.resize(N_JOINTS);
@@ -117,12 +115,11 @@ namespace robot_motion_primitives {
 
         KDL::JntArray q_curr(7);
         robot_interface_->getJointPosition(position_);
+
         ROS_INFO_STREAM(position_);
         ros::Rate rate_interp(publish_rate);
 
-        // double curr_time = 0.0;
         iiwa_msgs::Wrench wrench_ref;
-        wrench_ref.wrench.quantity.resize(7); // resize the wrench quantity
 
         // get current time from the robot
         robot_interface_->getRobotTime(curr_time);
@@ -130,7 +127,7 @@ namespace robot_motion_primitives {
         
         double new_time = curr_time - init_time;
 
-        memcpy(q_curr.data.data(), position_.position.quantity.data(),  7*sizeof(double));
+        memcpy(q_curr.data.data(), position_.position.quantity.data(),  7 * sizeof(double));
         vel_prof->solve(q_curr, q_final, duration);
 
         // TODO: exception catch
@@ -141,17 +138,16 @@ namespace robot_motion_primitives {
             vel_prof->get_desired_joint_pos(q_curr, new_time);
 
             // check if robot object is initialized first. for command_position --> shared pointer
-            memcpy(position_.position.quantity.data(), q_curr.data.data(), 7*sizeof(double));
-            robot_interface_->setJointPosition(position_);
+            memcpy(position_.position.quantity.data(), q_curr.data.data(), 7 * sizeof(double));
 
-
-            if (wrench) {
-                wrench_ref.wrench.quantity[0] = 0;
-                wrench_ref.wrench.quantity[1] = 0;
-                wrench_ref.wrench.quantity[2] = 1;
-
-                robot_interface_->setWrench(wrench_ref);
+            if (wrench) 
+            {
+                wrench_ref.x = 0;
+                wrench_ref.y = 0;
+                wrench_ref.z = 0; 
             }
+
+            robot_interface_->setJointPositionWrench(position_, wrench_ref);
 
             rate_interp.sleep();
         }

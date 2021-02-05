@@ -53,9 +53,9 @@ find_package(orocos_kdl REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-   INCLUDE_DIRS include
-   # LIBRARIES kuka_motion
-   CATKIN_DEPENDS roscpp rospy std_msgs iiwa_msgs ecl_geometry robot_interface robot_motion
+   INCLUDE_DIRS include src/alglib/src
+   LIBRARIES kuka_motion
+   CATKIN_DEPENDS roscpp rospy std_msgs iiwa_msgs ecl_geometry robot_interface robot_models
    # DEPENDS system_lib
 )
 
@@ -91,9 +91,10 @@ MESSAGE( STATUS "   " ${orocos_kdl_INCLUDE_DIRS})
 file(GLOB alglib_SRC
     "src/alglib/src/*.cpp"
 )
+
 ## Declare a C++ library
 add_library(kuka_motion
-   src/kuka_lib.cpp
+   src/kuka_lib.cpp src/utils.cpp src/robot_kinematics.cpp src/robot_motion_library.cpp ${alglib_SRC}
 )
 
 target_link_libraries(kuka_motion
@@ -102,9 +103,10 @@ target_link_libraries(kuka_motion
     ${netft_utils_LIBRARIES}
 )
 
-add_executable(kuka_path_test scripts/path_test.cpp src/utils.cpp src/robot_kinematics.cpp src/robot_motion_library.cpp  ${alglib_SRC})
 
-add_executable(position_wrench scripts/position_wrench.cpp src/utils.cpp src/robot_kinematics.cpp src/robot_motion_library.cpp  ${alglib_SRC})
+add_executable(kuka_path_test scripts/path_test.cpp)
+
+add_executable(position_wrench scripts/position_wrench.cpp)
 
 
 target_link_libraries(position_wrench

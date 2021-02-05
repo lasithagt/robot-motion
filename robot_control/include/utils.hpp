@@ -24,13 +24,15 @@ namespace read_txt_files {
 }
 
 namespace utils {
+
     struct path_user {
         Eigen::MatrixXf data;
         double start_time;
         double end_time;
     } ;
     // void spline_interp(std::vector<ecl::CubicSpline> &splines, Eigen::MatrixXf &data, const int n_data, double start_time, double stop_time);
-    // void spline_piecewise_interp(std::vector<alglib::spline1dinterpolant> &splines, Eigen::MatrixXf &data, double start_time, double end_time);
+
+    void linear_piecewise_interp(const Eigen::Ref<Eigen::MatrixXd>&, Eigen::MatrixXd &data_interpolated, int scale);
     int* linspace(double a, double b, int c);
 }
 

@@ -1,14 +1,17 @@
-#include "robot_class.hpp"
+#ifndef ROBOT_INTERFACE_SIM_HPP
+#define ROBOT_INTERFACE_SIM_HPP
 
+#include "robot_class.hpp"
+#include <std_msgs/Time.h>
 
 namespace robot_interface {
 
   // Abstract class for KUKA gazebo simulation
-  class robotKUKA_SIM : public robotABSTRACT {
+  class robotKUKA_SIM : virtual public robotABSTRACT {
   public:
     robotKUKA_SIM(bool enable_ft);
 
-    void init(ros::NodeHandle& nh_states, ros::NodeHandle& nh_command);
+    void init(ros::NodeHandle& nh_states, ros::NodeHandle& nh_command) override;
 
     void initPy() 
     {
@@ -67,6 +70,11 @@ namespace robot_interface {
       robotCommandHandler<std_msgs::Float64> handler_command_torque_p5_;
       robotCommandHandler<std_msgs::Float64> handler_command_torque_p6_;
       robotCommandHandler<std_msgs::Float64> handler_command_torque_p7_;
+
+      robotCommandHandler<std_msgs::Time> handler_command_time_;
+
   };
 
 }
+
+#endif
