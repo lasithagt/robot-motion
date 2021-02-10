@@ -10,8 +10,6 @@
 #include <kdl/chaindynparam.hpp>
 #include <kdl/chain.hpp>
 #include <kdl/chainiksolvervel_pinv.hpp>
-#include <kdl/chainfdsolver_recursive_newton_euler.hpp>
-#include <kdl/chainfdsolver.hpp>
 #include <kdl/chainfksolverpos_recursive.hpp>
 #include <kdl/chainfksolvervel_recursive.hpp>
 #include <kdl/chainjnttojacdotsolver.hpp>

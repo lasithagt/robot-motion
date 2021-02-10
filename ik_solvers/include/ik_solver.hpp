@@ -47,11 +47,11 @@ public:
 	
 	int maxIterations;
 	Eigen::Matrix<double, 4, 4> Tsb;
-	Eigen::Vector<double, 6> Vs;
+	Eigen::Matrix<double, 6, 1> Vs;
 	Eigen::VectorXd rho;
 	Eigen::Matrix<double, 2, NDOF> joint_limits;
-	Eigen::Vector<double, NDOF> q_range;
-	Eigen::Vector<double, NDOF> q_mid;
+	Eigen::Matrix<double, NDOF, 1> q_range;
+	Eigen::Matrix<double, NDOF, 1> q_mid;
 
 	Eigen::CompleteOrthogonalDecomposition<Eigen::Matrix<double, 6, NDOF> > cod;
 
