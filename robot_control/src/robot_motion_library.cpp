@@ -35,8 +35,8 @@ namespace robot_motion_primitives {
         // define robot kinematics and dynamic parameters
 
         // reserve the number of splines in vector
-        splines.resize(N_JOINTS);
-        splines_pp_.resize(N_JOINTS);
+        // splines.resize(N_JOINTS);
+        // splines_pp_.resize(N_JOINTS);
 
         // quintic spline parameters
 

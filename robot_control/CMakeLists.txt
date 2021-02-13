@@ -12,13 +12,10 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  ecl_geometry
-  ecl_exceptions
   geometry_msgs
   iiwa_msgs
   robot_interface
   robot_models
-  #robot_motion
 )
 
 find_package(Boost REQUIRED
@@ -55,7 +52,7 @@ find_package(orocos_kdl REQUIRED)
 catkin_package(
    INCLUDE_DIRS include src/alglib/src
    LIBRARIES kuka_motion
-   CATKIN_DEPENDS roscpp rospy std_msgs iiwa_msgs ecl_geometry robot_interface robot_models
+   CATKIN_DEPENDS roscpp rospy std_msgs iiwa_msgs robot_interface robot_models
    # DEPENDS system_lib
 )
 
@@ -69,7 +66,6 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${orocos_kdl_INCLUDE_DIRS}
-  #${netft_utils_INCLUDE_DIRS}
   /usr/include/eigen3
   /usr/local/include
   ${Boost_INCLUDE_DIRS} 

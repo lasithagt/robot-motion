@@ -18,13 +18,6 @@
 #include <fstream>
 #include <boost/tokenizer.hpp>
 
-#include <ecl/geometry.hpp>
-#include <ecl/containers.hpp>
-#include <ecl/exceptions.hpp>
-#include <ecl/errors.hpp>
-#include <ecl/concepts.hpp>
-#include <ecl/converters.hpp>
-
 
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Geometry>
@@ -55,9 +48,7 @@ namespace robot_motion_primitives {
         void move_null_orientation(Eigen::MatrixXd& FK, Eigen::MatrixXd& Jac, Eigen::MatrixXd &Jac_null_O, const double* q, Eigen::VectorXd &qdot, double vel);
         void move_constant_orientation(iiwa_msgs::JointPosition &position_, Eigen::VectorXd &qdot, double vel, bool(&term_c)(double time_start));
 
-    
-        std::vector<ecl::CubicSpline> splines;
-        std::vector<alglib::spline1dinterpolant> splines_pp_;
+ 
         robot_interface::robotABSTRACT* robot_interface_;
         std::shared_ptr<RobotAbstract> robot_def;
 

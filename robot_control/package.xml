@@ -68,9 +68,6 @@
   <build_depend>netft_utils</build_depend>
   <exec_depend>iiwa_msgs</exec_depend>
 
-  <build_depend>ecl_geometry</build_depend>
-  <exec_depend>ecl_geometry</exec_depend>
-  
   <build_depend>geometry_msgs</build_depend>
   <exec_depend>geometry_msgs</exec_depend>
 
