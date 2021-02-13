@@ -6,12 +6,6 @@
 #include <fstream>
 #include <boost/tokenizer.hpp>
 
-#include <ecl/geometry.hpp>
-#include <ecl/containers.hpp>
-#include <ecl/exceptions.hpp>
-#include <ecl/errors.hpp>
-#include <ecl/concepts.hpp>
-#include <ecl/converters.hpp>
 #include "interpolation.h" // alglib
 #include "boost/lexical_cast.hpp"
 
