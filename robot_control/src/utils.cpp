@@ -82,8 +82,6 @@ namespace utils
         int current_size = data.cols();
         int new_size     = (current_size - 1) * scale;
 
-        data_interpolated.resize(data.rows(), current_size * scale);
-
         for (int i = 0;i < current_size;i++)
         {
             for (int j = 0;j < scale;j++)

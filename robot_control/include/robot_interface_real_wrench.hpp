@@ -25,7 +25,7 @@ namespace robot_interface {
     void setJointPositionWrench(const iiwa_msgs::JointPosition& position_desired, const iiwa_msgs::Wrench& wrench) override
     {
       // get current joint position
-      this->getJointPosition(position_current);
+      // this->getJointPosition(position_current);
 
       // caluculate the joint torque corresponding to the wrench
       ROS_INFO_STREAM("Commanding in WRENCH MODE...");
@@ -42,7 +42,8 @@ namespace robot_interface {
       // caluculate the joint torque corresponding to the wrench
       ROS_INFO_STREAM("Commanding in POSITION + TORQUE MODE...");
 
-      robotKUKA::setJointTorque(torque_ff);
+      // robotKUKA::setJointTorque(torque_ff);
+      // for (auto &it : torque_ff.torque.quantity) {std::cout << it << "\n" << std::endl;}
       robotKUKA::setJointPosition(position_desired);
     }
 
