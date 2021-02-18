@@ -120,7 +120,7 @@ target_link_libraries(kuka_path_test
 )
 
 #target_link_libraries(kuka_path_test -lnlopt)
-target_link_libraries(position_wrench -lnlopt)
+
 
 # Compile python bindings for python 2.7
 # add_library(pybindings SHARED src/pybindings.cpp src/robot_class.cpp)

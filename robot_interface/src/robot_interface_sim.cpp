@@ -63,10 +63,10 @@ namespace robot_interface {
     bool temp = handler_state_joint_.get(joint_state_);
     // if (temp) 
     {
+      value.header = joint_state_.header;
       memcpy(value.position.quantity.data(), joint_state_.position.data(), 7*sizeof(double));
     } 
     return temp;
-
   }
 
 

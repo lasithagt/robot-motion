@@ -41,17 +41,12 @@ namespace robot_interface {
 
     }
 
+
     void init(ros::NodeHandle& nh_states, ros::NodeHandle& nh_command) override
     {
-
-      handler_state_wrench_.init("/netft_data", nh_states);
-
-      // if (handler_state_wrench_.getNumPublishers() < 1)
-      // {
-      //   ROS_WARN_STREAM("Could not find the FT sensor topic...");
-      // }
-      
+      handler_state_wrench_.init("/netft_data", nh_states);   
     } 
+
 
     bool getStateWrench(iiwa_msgs::Wrench& value) 
     {
