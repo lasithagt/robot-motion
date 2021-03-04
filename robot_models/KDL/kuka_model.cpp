@@ -1,4 +1,5 @@
 #include "kuka_model.h"
+#include <ros/ros.h>
 
 using namespace KDL;
 
@@ -29,6 +30,7 @@ int KUKAModelKDL::initRobot()
 
     robotParams_.Kv = Eigen::MatrixXd::Zero(7, 7);
     robotParams_.Kv.diagonal() << 3.7, 1.5, 1.7, 1.9, 2, 2, 2;
+    ROS_INFO_STREAM("Initialized the robot...");
 
 
     return true;
@@ -150,10 +152,7 @@ void KUKAModelKDL::getSpatialJacobianDot(double* q, double* qd, Eigen::MatrixXd&
     jacobianDot = std::move(jacobian_.data);
 }
 
-void KUKAModelKDL::ik()
-{
-    
-}
+void KUKAModelKDL::ik() {}
 
 }
 

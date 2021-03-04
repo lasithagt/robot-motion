@@ -100,24 +100,24 @@ target_link_libraries(kuka_motion
 )
 
 
-add_executable(kuka_path_test scripts/path_test.cpp)
+# add_executable(kuka_path_test scripts/path_test.cpp)
 
-add_executable(position_wrench scripts/position_wrench.cpp)
+# add_executable(position_wrench scripts/position_wrench.cpp)
 
 
-target_link_libraries(position_wrench
-   ${catkin_LIBRARIES}
-   ${robot_interface_LIBRARIES}
-   kuka_motion
-   ${orocos_kdl_LIBRARIES}
-)
+# target_link_libraries(position_wrench
+#    ${catkin_LIBRARIES}
+#    ${robot_interface_LIBRARIES}
+#    kuka_motion
+#    ${orocos_kdl_LIBRARIES}
+# )
 
-target_link_libraries(kuka_path_test
-  ${catkin_LIBRARIES}
-  ${robot_interface_LIBRARIES}
-  kuka_motion
-  ${orocos_kdl_LIBRARIES} 
-)
+# target_link_libraries(kuka_path_test
+#   ${catkin_LIBRARIES}
+#   ${robot_interface_LIBRARIES}
+#   kuka_motion
+#   ${orocos_kdl_LIBRARIES} 
+# )
 
 #target_link_libraries(kuka_path_test -lnlopt)
 

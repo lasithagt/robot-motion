@@ -53,9 +53,8 @@ public:
     KUKAModelKDL(const Chain& robotChain, const KUKAModelKDLInternalData& robotParams);
     ~KUKAModelKDL();
     int initRobot();
-    void getForwardKinematics(double* q, double* qd, double *qdd, Eigen::Matrix<double,3,3>& poseM, Eigen::Vector3d& poseP, Eigen::Vector3d& vel, Eigen::Vector3d& accel, bool computeOther);
+    void getForwardKinematics(double* q, double* qd, double *qdd, Eigen::Matrix3d& poseM, Eigen::Vector3d& poseP, Eigen::Vector3d& vel, Eigen::Vector3d& accel, bool computeOther);
 
-    /* given q, qdot, qddot, outputs torque output*/
     void getInverseDynamics(double* q, double* qd, double* qdd, Eigen::VectorXd& torque);
     void getForwardDynamics(double* q, double* qd, const Eigen::VectorXd& force_ext, Eigen::VectorXd& qdd);
     void getMassMatrix(double* q, Eigen::MatrixXd& massMatrix);
@@ -64,6 +63,7 @@ public:
     void getSpatialJacobian(double* q, Eigen::MatrixXd& jacobian);
     void getSpatialJacobianDot(double* q, double* qd, Eigen::MatrixXd& jacobianDot);
     void ik();
+    void test(){}
 
     KUKAModelKDLInternalData robotParams_;
 
