@@ -49,7 +49,7 @@ namespace robot_interface {
     {
 
       // caluculate the joint torque corresponding to the wrench
-      ROS_INFO_STREAM("Commanding in POSITION + TORQUE MODE...");
+      // ROS_INFO_STREAM("Commanding in POSITION + TORQUE MODE...");
 
       // robotKUKA::setJointTorque(torque_ff);
       robotKUKA_SIM::setJointPosition(position_desired);

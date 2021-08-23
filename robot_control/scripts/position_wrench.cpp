@@ -52,20 +52,16 @@ robot_interface::robotKUKAForceControl* robot_;
 void read_data(int &n_data_q, std::unique_ptr<Eigen::MatrixXf> &data_q) {
 
    	ROS_INFO_STREAM("Starting reading the trajectory file."); 
-    // n_data_q = read_txt_files::readFile_nlines(getenv("HOME") + std::string("/Documents/ROS_ws/src/kuka-motion/data/desired_position_wrench.txt"));
-    n_data_q = read_txt_files::readFile_nlines(getenv("HOME") + std::string("/Documents/ROS_ws/src/kuka_motion/robot_motion/data/eight.txt"));
-    // n_data_q = read_txt_files::readFile_nlines(getenv("HOME") + std::string("/Documents/ROS_ws/src/kuka-motion/data/identification_stiffness.txt"));
+    n_data_q = read_txt_files::readFile_nlines(getenv("HOME") + std::string("/Documents/ROS_ws/src/kuka_ocp/kuka_motion/robot_control/data/line.txt"));
 
 
     ROS_INFO_STREAM("Number of data points");
     ROS_INFO_STREAM(n_data_q);
 
     data_q.reset(new Eigen::MatrixXf);
-    data_q.get()->resize(KUKA_N_JOINTS+3, n_data_q); 
+    data_q.get()->resize(7, n_data_q); 
 
-    // int ret = read_txt_files::readFile(*(data_q.get()), getenv("HOME") + std::string("/Documents/ROS_ws/src/kuka-motion/data/desired_position_wrench.txt"));
-    int ret = read_txt_files::readFile(*(data_q.get()), getenv("HOME") + std::string("/Documents/ROS_ws/src/kuka_motion/robot_motion/data/eight.txt"));
-    // int ret = read_txt_files::readFile(*(data_q.get()), getenv("HOME") + std::string("/Documents/ROS_ws/src/kuka-motion/data/identification_stiffness.txt"));
+    int ret = read_txt_files::readFile(*(data_q.get()), getenv("HOME") + std::string("/Documents/ROS_ws/src/kuka_ocp/kuka_motion/robot_control/data/line.txt"));
 
     ROS_INFO_STREAM("Finished reading the trajectory file.");
 }
@@ -126,7 +122,7 @@ int main (int argc, char** argv) {
 	
 	std::string vel_prof_name = "cubic_polynomial";
 
-	const double rate_interp = 500.0;
+	const double rate_interp = 100.0;
 	ros::Rate rate_(rate_interp);
 
 
@@ -150,8 +146,8 @@ int main (int argc, char** argv) {
 	iiwa_msgs::Wrench wrench_ref;
 
 
-	double duration = 50.0;
-	double duration_init = 30.0;
+	double duration = 20.0;
+	double duration_init = 5.0;
 	KDL::JntArray q_final(7); 
 	int f_count = 0; 	
 
@@ -219,7 +215,7 @@ int main (int argc, char** argv) {
     int iter = 0;
 
     // check if robot object is initialized first. for command_position --> shared pointer
-    while (ros::ok() && !ros::isShuttingDown() && (new_time < duration) && (iter<n_data_q_w)) {
+    while (ros::ok() && !ros::isShuttingDown() && (iter<n_data_q_w)) {
 
 
         for (int i = 0; i < n_states;i++) {
@@ -236,19 +232,6 @@ int main (int argc, char** argv) {
 
 		// Set the next position
 		robot_->setJointPosition(position_ref);
-		
-		wrench_ref.x = q_curr(7);
-		wrench_ref.y = q_curr(8);
-		wrench_ref.z = q_curr(9);
-
-		wrench_ref.header.stamp = ros::Time::now();
-
-		// robot_->setWrench(wrench_ref);
-
-    	// get the curr time
-    	robot_->getRobotTime(curr_time);
-		new_time = curr_time - init_time;
-
 		
 		rate_.sleep();
 
